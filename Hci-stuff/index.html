@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+
+      body {
+        background: url('KT4.png') no-repeat center center fixed;
+        background-size: cover;
+        opacity: 1.0; /* Adjust the opacity to make the image semi-transparent */
+      }
+
+      .MyReservationText {
+        display: flex;
+        margin-top: auto;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        font-size: xx-large;
+        text-decoration: underline;
+      }
+
+      .buttonBlock {
+        text-align: center;
+      }
+
+      button {
+        font-size: xx-large;
+        background-color: #04aa6d;
+        margin-inline-start: 10px;
+      }
+
+      .cancelButton {
+        margin-right: 160px;
+      }
+
+      .header1 {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        width: 100%;
+      }
+
+      .list {
+        align-items: center;
+        font-size: x-large;
+      }
+
+      .reservationBlock {
+        background-color: #fff;
+        opacity: 0.9;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 0 auto;
+        width: 50%;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="header1">
+      <h1>Reservation System</h1>
+    </div>
+
+    <br /><br />
+    <br /><br />
+
+    <div class="buttonBlock">
+      <a href="create.html">
+        <button>Reserve</button>
+      </a>
+      <button onclick="changeSelectedReservation()">Change</button>
+      <br /><br />
+      <button class="cancelButton" onclick="cancelSelectedReservation()">
+        Cancel
+      </button>
+    </div>
+
+    <br /><br />
+
+    <div class="reservationBlock">
+      <h2 class="MyReservationText">My Reservation</h2>
+      <div class="list" id="reservationList"></div>
+    </div>
+
+    <script>
+      // Retrieve reservations from local storage
+      const reservations =
+        JSON.parse(localStorage.getItem("reservations")) || [];
+
+      function displayReservations() {
+        const reservationList = document.getElementById("reservationList");
+        reservationList.innerHTML = reservations
+          .map(
+            (reservation, index) =>
+              `<p><input type="radio" name="reservation" value="${index}"> Reservation ${
+                index + 1
+              }:<br>Date: ${reservation.date}<br>Time: ${reservation.time}<br>Destination: ${
+                reservation.destination
+              }<br>Train: ${reservation.train}</p>`
+          )
+          .join("<br>");
+      }
+
+      function cancelSelectedReservation() {
+        const selectedReservation = document.querySelector(
+          'input[name="reservation"]:checked'
+        );
+        if (selectedReservation) {
+          const index = selectedReservation.value;
+          reservations.splice(index, 1);
+          localStorage.setItem("reservations", JSON.stringify(reservations));
+          displayReservations();
+        } else {
+          alert("Please select a reservation to cancel.");
+        }
+      }
+
+      function changeSelectedReservation() {
+        const selectedReservation = document.querySelector(
+          'input[name="reservation"]:checked'
+        );
+        if (selectedReservation) {
+          const index = selectedReservation.value;
+          window.location.href = `create.html?edit=${index}`;
+        } else {
+          alert("Please select a reservation to change.");
+        }
+      }
+
+      displayReservations();
+    </script>
+  </body>
+</html>

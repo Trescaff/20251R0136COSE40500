@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      .header1 {
+        background-color: #fff;
+        color: black;
+        text-align: center;
+        padding: 5px;
+        width: 100%;
+      }
+
+      body {
+        background: url('KT4.png') no-repeat center center fixed;
+        background-size: cover;
+        opacity: 1.0; /* Adjust the opacity to make the image semi-transparent */
+      }
+
+      button {
+        font-size: xx-large;
+        background-color: #04aa6d;
+        margin-inline-start: 10px;
+      }
+
+      .buttonBlock {
+        text-align: center;
+      }
+
+      .submitButton {
+        text-align: center;
+      }
+
+      .labelBlock {
+        text-align: center;
+        font-size: x-large;
+        background-color: #fff;
+        opacity: 0.9;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 0 auto;
+        width: 25%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header1">
+      <h1>Fill in the date</h1>
+    </div>
+
+    <br /><br />
+
+    <div class="buttonBlock">
+      <a href="index.html">
+        <button>Main Menu</button>
+      </a>
+      <button type="button" onclick="resetForm()">Reset</button>
+      <br /><br />
+    </div>
+
+    <form id="dataForm" onsubmit="storeReservation(event)" method="get">
+      <div class="submitButton">
+        <a href="submit.html">
+          <button type="submit">Submit</button>
+        </a>
+      </div>
+
+      <br /><br />
+      <br />
+
+      <div class="labelBlock">
+        <label for="start">Date:</label>
+        <input
+          type="date"
+          id="bookDate"
+          name="trip-time"
+          value="2024-07-22"
+          min="2024-01-01"
+          max="2024-12-31"
+        />
+        <br /><br />
+
+        <label for="time">Time:</label>
+        <input
+          type="time"
+          id="bookTime"
+          name="trip-time"
+          value="12:00"
+        />
+        <br /><br />
+
+        <label for="dest">Destination:</label>
+        <select name="dest" id="destLoc">
+          <option value="Busan">Busan</option>
+          <option value="Seoul">Seoul</option>
+          <option value="Sejong">Sejong</option>
+          <option value="Gapyeong">Gapyeong</option>
+          <option value="Gyeongju">Gyeongju</option>
+        </select>
+      </div>
+    </form>
+
+    <script>
+      function storeReservation(event) {
+        event.preventDefault();
+        const date = document.getElementById("bookDate").value;
+        const time = document.getElementById("bookTime").value;
+        const destination = document.getElementById("destLoc").value;
+
+        let reservations =
+          JSON.parse(localStorage.getItem("reservations")) || [];
+        const urlParams = new URLSearchParams(window.location.search);
+        const editIndex = urlParams.get('edit');
+        
+        if (editIndex !== null) {
+          reservations[editIndex] = { date, time, destination, train: reservations[editIndex].train };
+        } else {
+          const train = 100 + reservations.length;
+          reservations.push({ date, time, destination, train });
+        }
+
+        localStorage.setItem("reservations", JSON.stringify(reservations));
+        window.location.href = "submit.html";
+      }
+
+      function resetForm() {
+        localStorage.removeItem("reservations");
+        document.getElementById("dataForm").reset();
+      }
+
+      function loadReservationDetails() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const editIndex = urlParams.get('edit');
+
+        if (editIndex !== null) {
+          const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+          const reservation = reservations[editIndex];
+
+          if (reservation) {
+            document.getElementById("bookDate").value = reservation.date;
+            document.getElementById("bookTime").value = reservation.time;
+            document.getElementById("destLoc").value = reservation.destination;
+          }
+        }
+      }
+
+      window.onload = loadReservationDetails;
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      body {
+        background: url('KT4.png') no-repeat center center fixed;
+        background-size: cover;
+        opacity: 1.0; /* Adjust the opacity to make the image semi-transparent */
+      }
+
+      p {
+        text-align: left;
+        font-size: xx-large;
+        background-color: #fff;
+        width: 50%;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 10px;
+        opacity: 0.8;
+      }
+
+      .buttonBlock {
+        text-align: right;
+      }
+
+      button {
+        font-size: xx-large;
+        margin-inline-start: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <p id="reservationDetails">This Reservation</p>
+    </div>
+
+    <div class="buttonBlock">
+      <button onclick="downloadCSV()">Confirm</button>
+      <a href="create.html">
+        <button>Go back</button>
+      </a>
+    </div>
+    <script>
+      // Retrieve reservations from local storage
+      const reservations =
+        JSON.parse(localStorage.getItem("reservations")) || [];
+
+      // Display the reservations
+      const detailsElement = document.getElementById("reservationDetails");
+      detailsElement.innerHTML = reservations
+        .map(
+          (reservation) =>
+            `Reservation Date: ${reservation.date}<br>Time: ${reservation.time}<br>Destination: ${reservation.destination}<br>Train: ${reservation.train}`
+        )
+        .join("<br><br>");
+
+      function downloadCSV() {
+        const csvContent =
+          "data:text/csv;charset=utf-8," +
+          "Date,Time,Destination,Train\n" +
+          reservations
+            .map((r) => `${r.date},${r.time},${r.destination},KTX${r.train}`)
+            .join("\n");
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "reservations.csv");
+        document.body.appendChild(link);
+
+        link.click();
+        document.body.removeChild(link);
+      }
+    </script>
+  </body>
+</html>
