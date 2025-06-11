@@ -3,6 +3,8 @@ import { useParams, useNavigate  } from 'react-router-dom';
 import albumService from '../services/albumService';
 import CameraCapture from '../components/CameraCapture';
 
+// UploadPhotos.js
+// This component allows users to upload photos to a specific album
 const UploadPhotos = () => {
   const { code } = useParams();
   const navigate = useNavigate ();
