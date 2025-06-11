@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+// ViewAlbum.js
+// This component allows users to view and upload photos to a specific album
 const ViewAlbum = ({ albumCode }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
