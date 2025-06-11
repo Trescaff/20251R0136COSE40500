@@ -7,6 +7,7 @@ const Album = require('../models/Album');
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
+// Middleware to check if album exists
 // Upload endpoint: expects `albumCode` + `photo` file
 router.post('/', upload.single('photo'), async (req, res) => {
   try {
