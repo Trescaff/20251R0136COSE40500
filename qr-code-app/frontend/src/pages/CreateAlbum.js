@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import albumService from '../services/albumService';
 
+// CreateAlbum.js
+// This component allows users to create a new album and generate a QR code for it
 const CreateAlbum = () => {
   const [maxPhotos, setMaxPhotos] = useState(5);
   const [qrDataUrl, setQrDataUrl] = useState('');
